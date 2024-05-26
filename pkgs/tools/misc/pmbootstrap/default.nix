@@ -1,16 +1,25 @@
-{ stdenv, lib, git, openssl, buildPythonApplication, pytestCheckHook, ps
+{ stdenv, lib, git, openssl, python3, pytestCheckHook, ps
 , fetchPypi, fetchFromGitLab, sudo }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "pmbootstrap";
-  version = "2.2.0";
+  version = "2.3.1";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "postmarketos";
     repo = pname;
     rev = version;
-    hash = "sha256-wRJvvABIUPh79QfS8VcwRueB/vO9oGcqyE/OugfTsd8=";
+    sha256 = "sha256-0hC84Gyfr1FOpZGAc7pAhz/QBSTA5A/Lu/ZJdzlEcX4=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+    build
+    installer
+    setuptools
+    wheel
+  ];
 
   pmb_test = "${src}/test";
 
